@@ -1,1 +1,4 @@
 id,multiParcel,salePrice,instrument,bookPage,qualification,vacantOrImproved,saleDate,grantee,grantor
+1, 0,          1,        1,         0,       0,            0,               1,       1,      1 
+3, 3,          3,        3,         3,       3,            3,               3,       3,      3
+-1,N,$100,LE,1742/920,Unqualified,Improved,3/11/2022,AFRICA EUREKA DANIELS & ETAL,TRUMAN & EARLEN DANIELS

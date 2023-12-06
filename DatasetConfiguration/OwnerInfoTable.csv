@@ -1,2 +1,4 @@
 id,contactName,streetAddress,city,county,state,postalCode
-2,ARNETT SHARON A & TIMOTHY,4981 BUTTON LN,Marianna,Jackson County,FL,32448
+1, 1,          0,            1,   0,     0,    1 
+3, 3,          3,            3,   3,     3,    3
+-1,ARNETT SHARON A & TIMOTHY,4981 BUTTON LN,Marianna,Jackson County,FL,32448
