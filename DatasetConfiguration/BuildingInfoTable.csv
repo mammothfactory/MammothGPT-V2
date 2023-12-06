@@ -1,0 +1,2 @@
+id, type, totalArea, exteriorWalls, roofCover, roofType,floorCover,heat,airConditioning,bathrooms,bedrooms,stories,actualYearBuilt,interiorWalls,frameType,heatedArea,effectiveYearBuilt
+ 1, 1,    1,         1,             1,         0
