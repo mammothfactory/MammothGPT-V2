@@ -13,3 +13,6 @@ In order to optimize MammothGPT we will define THREE different Hugging Face Data
 1) Hugging Face Dataset #1 (Largest with minimal data removed from the web scraping and API inputs) 
 2) Hugging Face Dataset #2 (Focused on physical property and location data)
 3) Hugging Face Dataset #3 (Focused on previous owner, sales, and value data)
+
+
+DatasetDocumentation.numbers (and its export to DatasetDocumentation.xls) should act as the final documentation of python code, and NOT how code initially defined. See the .csv files in the "DatasetConfiguration" directory for how code should be defined.
