@@ -1,4 +1,4 @@
 id,buildingValue,extraFeaturesValue,landValue,landAgriculturalValue,agriculturalMarketValue,justMarketValue,assessedValue,exemptValue,taxableValue,maximumSaveOurHomesPortability
-1, 1,            0,                 1,        1,                    1,              1,            0,          1,           0
-3, 3,            3,                 3,        3,                    3,              3,            3,          3,           3 
+1, 1,            0,                 1,        1,                    1,                      1,              0,            1,          0,           0
+3, 3,            3,                 3,        3,                    3,                      3,              3,            3,          3,           0
 -1,$188040,$3238,$18986,$10986,$39600,$230878,$156282,$156282,$0,$53982
