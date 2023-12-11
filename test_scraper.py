@@ -1,5 +1,5 @@
 from botasaurus import *
-
+import pyperclip
 from selenium import webdriver
 from time import sleep
 import random
@@ -27,7 +27,8 @@ def construct_beacon_schneidercorp_url(rawParcelId: str) -> str:
     Returns:
         str: Valid URL with multiple parameters (&) after the separator (?)
     """
-    url = "https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353" + "&KeyValue=" + str(rawParcelId) 
+    url = "https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353" + "&KeyValue=" + str(rawParcelId)
+    print("---url---", url)
     return url
 
 
@@ -131,8 +132,10 @@ def next_parcel_id(rawParcelId: str) -> str:
     
     return nextId
 
-@browser(cache=True, block_images=True, headless=True, reuse_driver=True, parallel=bt.calc_max_parallel_browsers, run_async=True)
+#cache=True, block_images=True,  reuse_driver=True, parallel=bt.calc_max_parallel_browsers, run_async=True
+@browser(cache=True, block_images=True,  reuse_driver=True, headless=True)
 def do_scrape(driver: AntiDetectDriver, data):
+    print("---------")
     id = ParcelId("01-2N-10-0000-000F-0100", "FL")
     JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MIN = ['01', '2N', '10', '0000', '0000', '0000']
     JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MAX = ['36', '7N', '14', '0100', '01FF', '0100']
@@ -144,7 +147,7 @@ def do_scrape(driver: AntiDetectDriver, data):
     https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353&Q=594701655&KeyValue=01-3N-07-0000-0310-0011    
     """
     validUrl = True
-
+    print("---", validUrl)
     for i in range(5_518_800_001):
         nextId = id.next(JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MIN, JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MAX)
         print(f"URL to search is: {nextId}")
@@ -236,4 +239,5 @@ def do_scrape(driver: AntiDetectDriver, data):
         driver.quit()
 
 if __name__ == "__main__":
+    print("Scraping started.....")
     do_scrape()
