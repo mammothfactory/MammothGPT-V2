@@ -36,11 +36,15 @@ Pygments==2.17.2
 python-dateutil==2.8.2
 pytz==2023.3.post1
 PyYAML==6.0.1
+regex==2023.10.3
 requests==2.31.0
+safetensors==0.4.1
 six==1.16.0
 stack-data==0.6.3
+tokenizers==0.15.0
 tqdm==4.66.1
 traitlets==5.14.0
+transformers==4.36.0
 typing_extensions==4.8.0
 tzdata==2023.3
 urllib3==2.1.0
