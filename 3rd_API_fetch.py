@@ -11,7 +11,7 @@ from dotenv import dotenv_values
 REGRID_DATA_SCHEMA_INVALID = "Too few or too many target keys found JSON returned by schema defined at https://support.regrid.com/parcel-data/schema"  
 
 config = dotenv_values()
-token = config['PARCEL_TRIAL_TOKEN']
+token = config['PARCEL_TOKEN']
 
 HEADERS = {
     "accept": "application/json",
@@ -116,6 +116,7 @@ def construct_regrid_url(stateZipCode: int, landUseCodeActivity: list) -> str:
     return url
     
 url =  construct_regrid_url(46202, [2000, 2100])
+
 response = requests.get(url, headers=HEADERS)
 
 if response.status_code == 200 and 'application/json' in response.headers['Content-Type']:
@@ -126,7 +127,7 @@ else:
     print(f"Failed to fetch or parse JSON. Status code: {response.status_code}")
 
 target_key = "parcelnumb_no_formatting"
-# print(count_key_occurence("output.json", target_key))
+
 
 
 
