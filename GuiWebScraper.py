@@ -5,9 +5,12 @@ from time import sleep
 import pyperclip
 from bs4 import BeautifulSoup
 import random
-
+import json
 import GlobalConstants as GC
 from ParcelId import ParcelId
+
+owner_info_json_path = './owner_info.json'
+parcel_info_json_path = './parcel_info.json'
 
 def construct_beacon_schneidercorp_url(rawParcelId: str) -> str:
     """ Construct a valid url to request valid HTML from
@@ -21,7 +24,7 @@ def construct_beacon_schneidercorp_url(rawParcelId: str) -> str:
         str: Valid URL with multiple parameters (&) after the separator (?)
     """
     url = "https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353" + "&KeyValue=" + str(rawParcelId)
-    print("---url---", url)
+
     return url
 
 
@@ -50,12 +53,12 @@ def parse_raw_owner_address(firstOwner: str, inputText: str) -> tuple:
     state = ''
     postalCode = ''
     try:
-        indexErrorCheck = lines[3]              # indexErrorCheck is '' or DOES NOT EXIST because of final \n  character in inputText function parameter
+        indexErrorCheck = lines[4]              # indexErrorCheck is '' or DOES NOT EXIST because of final \n  character in inputText function parameter
 
         secondOwner = lines[0].strip()
         streetAddress = lines[1].strip()
-        city_state_postal = lines[2].split(',')
-        print("======", city_state_postal)
+        city_state_postal = lines[3].split(',')
+
 
     except IndexError:
         streetAddress = lines[0].strip()
@@ -67,7 +70,7 @@ def parse_raw_owner_address(firstOwner: str, inputText: str) -> tuple:
             state_postal = city_state_postal[1].strip().split('  ')   # NOTE: TWO EMPTY SPACES!!!
             state = state_postal[0].strip().upper()
             postalCode = state_postal[1].strip()
-            print("---postalCode---", postalCode)
+
 
             if state == '' or postalCode == '':
                 error = True
@@ -88,6 +91,7 @@ def parse_raw_parcel_summary(parcel_id: str, address: str, description: str, use
      'VACANT 0000(Note: *The Use Code is a Dept. of Revenue (DOR) code. For zoning information, please contact the Jackson County Community Development office at (850) 482-9637. For zoning information within aCITY/TOWN, please contact thatCITY/TOWNhall.)', 
      '01-3N-07', '15', '12.378', '2.6', 'N']
     """
+    print("----parcelID", parcel_id)
     parcelId = parcel_id
     parcelAddress = address    # Some counties add city name to the end of street address
     desc = description
@@ -105,7 +109,7 @@ def parse_raw_parcel_summary(parcel_id: str, address: str, description: str, use
     if parcel_acreage == '':
         error = True
     else:
-        print("===>", parcel_acreage)
+
         acreage = float(parcel_acreage)
 
     if not (len(is_homestead) == 1):
@@ -161,6 +165,7 @@ def get_soup(url):
     # Creating the Beautiful soup with copied content for finding elements
     soup = BeautifulSoup(text, 'html.parser')
     # Closing the Chrome browser
+    pag.hotkey('ctrlleft', 'w')
     #pag.click(1897, 15, duration = 0.3)
     return soup
 
@@ -178,6 +183,10 @@ def scrape():
         print(f"URL to search is: {nextId}")
         url = construct_beacon_schneidercorp_url(nextId)
         soup = get_soup(url)
+        if soup.find("title")==None:
+            soup = get_soup(url)
+        if soup.find("title").text=="Just a moment...":
+            soup = get_soup(url)
 
         owner_name = ''
         owner_address = None
@@ -218,7 +227,7 @@ def scrape():
                 parcel_summary_map_element = container.find("table", id="ctlBodyPane_ctl02_ctl01_tbMapLink")
                 href_value = parcel_summary_map_element.find("a", {"id": "ctlBodyPane_ctl02_ctl01_lnkMap"})["href"]
                 mapLink = "https://beacon.schneidercorp.com/" + href_value
-                print("wow---", parse_raw_owner_address(owner_name, owner_address))
+
                 (allOwners, streetAddress, city, state, postalCode, ownerError) = parse_raw_owner_address(owner_name, owner_address)
                 (parcelId, parcelAddress, desc, useCode, acreage, isHomestead, link, summaryError) = parse_raw_parcel_summary(parcel_id, parcel_address, parcel_description, parcel_property_use_code, parcel_acreage, parcel_is_homestead, mapLink)
                 print(f'Parcel ID scraped was: {parcelId}')
@@ -233,7 +242,24 @@ def scrape():
                         "state": state,
                         "postalCode": postalCode
                     }
-                    bt.write_json(result_owner, "result_owner.json")
+
+                    # data = json.load(owner_info_json_path)
+                    # data.update(result_owner)
+                    # print("---", data)
+                    with open(owner_info_json_path, mode='r') as file:
+
+                        data = json.load(file)
+                        data["owner_details"].append(result_owner)
+                        file.seek(0)
+
+                        with open(owner_info_json_path, mode='w') as file:
+                            json.dump(data, file, indent = 4)
+                        # data.update(result_owner)
+                        #
+                        # with open(owner_info_json_path, mode='w') as file:
+                        #     json.dump(data, file, indent=4)
+
+                    #bt.write_json(result_owner, "result_owner.json")
                     result_parcel = {
                         "parcelId": parcelId,
                         "parcelAddress": parcelAddress,
@@ -244,8 +270,18 @@ def scrape():
                         "state": state,
                         "link": link
                     }
-                    bt.write_json(result_parcel, "result_parcel.json")
-                    return result_owner, result_parcel
+
+                    with open(parcel_info_json_path, mode='r') as file:
+                        data = json.load(file)
+                        data["parcel_details"].append(result_parcel)
+                        file.seek(0)
+                        with open('parcel_info.json', mode='w') as file:
+                            json.dump(data, file, indent = 4)
+                        # with open('parcel_info.json', mode='w') as file:
+                        #     json.dump(data, file, indent=4)
+
+                    #bt.write_json(result_parcel, "result_parcel.json")
+                    #return result_owner, result_parcel
 
                 else:
                     print("Parsing failed...")

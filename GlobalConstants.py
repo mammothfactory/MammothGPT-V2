@@ -14,7 +14,7 @@ __doc__        = "CONSTANTS for Llama2 and Falcon MammothGPT LLM's"
 # https://pypi.org/project/pylint/
 # pylint: disable=invalid-name
 
-TODO = -1 
+TODO = -1
 
 DEBUG_STATEMENTS_ON = True
 
@@ -24,12 +24,12 @@ HEXADECIMAL = '0x'
 NVIDIA_INFO_COMMAND = "nvidia-smi"
 CPU_TEMP_COMMAND = "cat /sys/class/thermal/thermal_zone*/temp"
 
-PARCEL_ID_ROW = 0
+PARCEL_ID_ROW = 1
 PARCEL_ADDRESS_ROW = 3
 PARCEL_DESC_ROW = 5
 PARCEL_USE_CODE_ROW = 7
-PARCEL_ACREAGE_ROW = 13
-PARCEL_IS_HOMESTEAD_ROW = 15
+PARCEL_ACREAGE_ROW = 15
+PARCEL_IS_HOMESTEAD_ROW = 17
 
 PRIMARY_KEY_COLUMN_NUMBER = 0
 CONTECT_COLUMN_NUMBER = 1
@@ -51,23 +51,23 @@ PARCEL_URL = "https://app.regrid.com/api/v1/search.json"
 
 # Florida CONSTANTS
 FLORIDA_COUNTIES =  ["Alachua", "Baker", "Bay", "Bradford", "Brevard", "Broward", "Calhoun", "Charlotte", "Citrus", "Clay", "Collier", "Columbia",
-                    "DeSoto", "Dixie", "Duval", "Escambia", "Flagler", "Franklin", "Gadsden", "Gilchrist", "Glades", "Gulf",
-                    "Hamilton", "Hardee", "Hendry", "Hernando", "Highlands", "Hillsborough", "Holmes", "Indian River",
-                    "Jackson", "Jefferson", "Lafayette", "Lake", "Lee", "Leon", "Levy", "Liberty",
-                    "Madison", "Manatee", "Marion", "Martin", "Miami-Dade", "Monroe", "Nassau",
-                    "Okaloosa", "Okeechobee", "Orange", "Osceola", "Palm Beach", "Pasco", "Pinellas", "Polk", "Putnam",
-                    "Santa Rosa", "Sarasota", "Seminole", "St. Johns", "St. Lucie", "Sumter", "Suwannee",
-                    "Taylor", "Union", "Volusia", "Wakulla", "Walton", "Washington"]
+                     "DeSoto", "Dixie", "Duval", "Escambia", "Flagler", "Franklin", "Gadsden", "Gilchrist", "Glades", "Gulf",
+                     "Hamilton", "Hardee", "Hendry", "Hernando", "Highlands", "Hillsborough", "Holmes", "Indian River",
+                     "Jackson", "Jefferson", "Lafayette", "Lake", "Lee", "Leon", "Levy", "Liberty",
+                     "Madison", "Manatee", "Marion", "Martin", "Miami-Dade", "Monroe", "Nassau",
+                     "Okaloosa", "Okeechobee", "Orange", "Osceola", "Palm Beach", "Pasco", "Pinellas", "Polk", "Putnam",
+                     "Santa Rosa", "Sarasota", "Seminole", "St. Johns", "St. Lucie", "Sumter", "Suwannee",
+                     "Taylor", "Union", "Volusia", "Wakulla", "Walton", "Washington"]
 
 COUNTY_PROPERTY_WEBSITES = {}
 
 STATES ={
-        "AL" : "Alabama", "AK" : "Alaska", "Az" : "Arizona", "AR" : "Arkansas", "CA" : "California", "CO" : "Colorado", "CT" : "Connecticut", "DE" : "Delaware", "FL" : "Florida", "GA" : "Georgia",
-        "HI" : "Hawaii", "ID" : "Idaho", "IL" : "Illinois", "IN" : "Indiana", "IA" : "Iowa", "KS" : "Kansas", "KY" : "Kentucky", "LA" : "Louisiana", "ME" : "Maine", "MD" : "Maryland", "MA" : "Massachusetts",
-        "MI" : "Michigan", "MN" : "Minnesota", "MS" : "Mississippi", "MO" : "Missouri", "MT" : "Montana", "NE" : "Nebraska", "NV" : "Nevada", "NH" : "New Hampshire", "NJ" : "New Jersey", "NM" : "New Mexico",
-        "NY" : "New York", "NC" : "North Carolina", "ND" : "North Dakota", "OH" : "Ohio", "OK" : "Oklahoma", "OR" : "Oregon", "PA" : "Pennsylvania", "RI" : "Rhode Island", "SC" : "South Carolina", 
-        "SD" : "South Dakota", "TN" : "Tennessee", "TX" : "Texas", "UT" : "Utah", "VT" : "Vermont", "VA" : "Virginia", "WA" : "Washington", "WV" : "West Virginia", "WI" : "Wisconsin", "WY" : "Wyoming"
-        }
+    "AL" : "Alabama", "AK" : "Alaska", "Az" : "Arizona", "AR" : "Arkansas", "CA" : "California", "CO" : "Colorado", "CT" : "Connecticut", "DE" : "Delaware", "FL" : "Florida", "GA" : "Georgia",
+    "HI" : "Hawaii", "ID" : "Idaho", "IL" : "Illinois", "IN" : "Indiana", "IA" : "Iowa", "KS" : "Kansas", "KY" : "Kentucky", "LA" : "Louisiana", "ME" : "Maine", "MD" : "Maryland", "MA" : "Massachusetts",
+    "MI" : "Michigan", "MN" : "Minnesota", "MS" : "Mississippi", "MO" : "Missouri", "MT" : "Montana", "NE" : "Nebraska", "NV" : "Nevada", "NH" : "New Hampshire", "NJ" : "New Jersey", "NM" : "New Mexico",
+    "NY" : "New York", "NC" : "North Carolina", "ND" : "North Dakota", "OH" : "Ohio", "OK" : "Oklahoma", "OR" : "Oregon", "PA" : "Pennsylvania", "RI" : "Rhode Island", "SC" : "South Carolina",
+    "SD" : "South Dakota", "TN" : "Tennessee", "TX" : "Texas", "UT" : "Utah", "VT" : "Vermont", "VA" : "Virginia", "WA" : "Washington", "WV" : "West Virginia", "WI" : "Wisconsin", "WY" : "Wyoming"
+}
 
 # https://www.qpublic.net/fl/jackson/search.html
 
@@ -80,5 +80,5 @@ STATES ={
 #https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353&Q=435552219&KeyValue=01-2N-10-0000-0020-0020
 #https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=4&PageID=13353&KeyValue=01-2N-10-0000-0020-0020
 
-# If a parcel ID does not exist like 01-2N-10-0000-0010-0001  
+# If a parcel ID does not exist like 01-2N-10-0000-0010-0001
 #https://beacon.schneidercorp.com/Application.aspx?AppID=851&LayerID=15884&PageTypeID=3&PageID=7082&Q=1127906194
