@@ -11,7 +11,7 @@ from dotenv import dotenv_values
 REGRID_DATA_SCHEMA_INVALID = "Too few or too many target keys found JSON returned by schema defined at https://support.regrid.com/parcel-data/schema"  
 
 config = dotenv_values()
-token = config['PARCEL_TRIAL_TOKEN']
+token = config['PARCEL_TOKEN']
 
 HEADERS = {
     "accept": "application/json",
@@ -115,11 +115,15 @@ def construct_regrid_url(stateZipCode: int, landUseCodeActivity: list) -> str:
     url = "https://app.regrid.com/api/v1/query?" + "fields[szip][eq]=" + str(stateZipCode) + "&fields[lbcs_activity][between]=" + str(landUseCodeActivity) + "&fields[state2][eq]=" + str(state) + "&context=%2Fus%2F" + str(state) + "%2F" + str(county) 
     return url
     
-url =  construct_regrid_url(46202, [2000, 2100])
+#url =  construct_regrid_url(46202, [2000, 2100])
+url = construct_regrid_url(55019, [1000, 9500])
+print("url---", url)
 response = requests.get(url, headers=HEADERS)
+print("response---", response.headers)
 
 if response.status_code == 200 and 'application/json' in response.headers['Content-Type']:
     data = response.json()
+    print("------",data)
     with open("3rd_API_output.json", "w") as file:
         json.dump(data, file, indent=2)
 else:

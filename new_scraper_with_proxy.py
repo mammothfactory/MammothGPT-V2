@@ -8,9 +8,30 @@ import random
 import json
 import GlobalConstants as GC
 from ParcelId import ParcelId
+import requests
 
 owner_info_json_path = './owner_info.json'
 parcel_info_json_path = './parcel_info.json'
+
+
+def get_html_source_with_proxy(url):
+    api_url = "https://scraper-api.smartproxy.com/v2/scrape"
+    payload = {
+        "target": "universal",
+        "url": url,
+        "locale": "en-us",
+        "geo": "United States",
+        "device_type": "desktop",
+        "headless": "html"
+    }
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": "Basic VTAwMDAxMzc5MjY6UFcxZGYyNDc2YjNhMjk1ODA5ZjEzZWExNjA0MjI4ZWQ1NzU="
+    }
+    response = requests.post(api_url, json=payload, headers=headers)
+    source = response.json()['results'][0]['content']
+    return source
 
 def construct_beacon_schneidercorp_url(rawParcelId: str) -> str:
     """ Construct a valid url to request valid HTML from
@@ -132,44 +153,6 @@ def next_parcel_id(rawParcelId: str) -> str:
 
     return nextId
 
-def get_soup(url):
-    # Clicking the Start Menu in Win 10
-    pag.click(26,1062, duration = 0.5)
-    # Typing Chrome in the search input
-    pag.write('Chrome')
-    sleep(0.5)
-    # Clicking Chrome
-    pag.click(116, 674)
-    sleep(0.5)
-    # Clicking Chrome
-    pag.click(691, 428, duration = 0.5)
-    # Clicking the Google search input
-    pag.click(143, 54, duration = 0.5)
-    # Typing the to-scrape URL
-    pag.write(url)
-    pag.press('enter')
-
-    sleep(3)
-    # Moving to the center point of Browser
-    pag.moveTo(976, 611, duration=0.5)
-    # Right clicking the mouse
-    pag.click(button='right')
-    # Clicking the page sourse item
-    pag.click(1020, 920, duration = 0.5)
-    # Copying the entire content
-    pag.hotkey('ctrlleft', 'a')
-    pag.hotkey('ctrlleft', 'c')
-    # Copying it to text variable in the script using Pyperclip package
-    text = pyperclip.paste()
-    sleep(1)
-    # Creating the Beautiful soup with copied content for finding elements
-    soup = BeautifulSoup(text, 'html.parser')
-    # Closing the Chrome browser
-    pag.hotkey('ctrlleft', 'w')
-    #pag.click(1897, 15, duration = 0.3)
-    return soup
-
-
 
 def scrape():
     id = ParcelId("01-2N-10-0000-000F-0100", "FL")
@@ -182,11 +165,14 @@ def scrape():
         nextId = id.next(JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MIN, JACKSON_COUNTY_SECTION_TOWNSHIP_RANGE_BLOCK_PARCEL_SUBPARCEL_MAX)
         print(f"URL to search is: {nextId}")
         url = construct_beacon_schneidercorp_url(nextId)
-        soup = get_soup(url)
-        if soup.find("title")==None:
-            soup = get_soup(url)
-        if soup.find("title").text=="Just a moment...":
-            soup = get_soup(url)
+        renderedHtml = get_html_source_with_proxy(url)
+        sleep(10)
+        soup = BeautifulSoup(renderedHtml, 'html.parser')
+
+        # if soup.find("title")==None:
+        #     soup = BeautifulSoup(renderedHtml, 'html.parser')
+        # if soup.find("title").text=="Just a moment...":
+        #     soup = BeautifulSoup(renderedHtml, 'html.parser')
 
         owner_name = ''
         owner_address = None
@@ -216,7 +202,7 @@ def scrape():
             if validUrl:
                 parcel_summary_element = container.find("table", class_="tabular-data-two-column")
                 second_column_contents = [td.get_text(strip=True) for td in soup.select("table.tabular-data-two-column td")]
-
+                print("----second-column-contents----",second_column_contents)
                 parcel_id = second_column_contents[GC.PARCEL_ID_ROW]
                 parcel_address = second_column_contents[GC.PARCEL_ADDRESS_ROW]
                 parcel_description = second_column_contents[GC.PARCEL_DESC_ROW]
@@ -290,6 +276,7 @@ def scrape():
         id = ParcelId(nextId, "FL")
         validUrl = True
         sleep(random.uniform(3, 6))
+
 
 if __name__ == "__main__":
     print("Give window focus to any browser, starting automation in: ")
