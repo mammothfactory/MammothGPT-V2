@@ -108,28 +108,49 @@ def construct_regrid_url(stateZipCode: int, landUseCodeActivity: list) -> str:
     """
     search = SearchEngine()
     result = search.by_zipcode(stateZipCode)
+    #print("result---", result)
+    if result is None:
+        print(f"No search result for zipcode: {stateZipCode}")
+        return None
     state = result.state
+    #print("---", state)
     fullCountyName = str(result.county)
     county = fullCountyName.split()[0].lower()
-    
-    url = "https://app.regrid.com/api/v1/query?" + "fields[szip][eq]=" + str(stateZipCode) + "&fields[lbcs_activity][between]=" + str(landUseCodeActivity) + "&fields[state2][eq]=" + str(state) + "&context=%2Fus%2F" + str(state) + "%2F" + str(county) 
+
+    url = "https://app.regrid.com/api/v1/query?" + "fields[szip][eq]=" + str(stateZipCode) + "&fields[lbcs_activity][between]=" + str(landUseCodeActivity) + "&fields[state2][eq]=" + str(state) + "&context=%2Fus%2F" + str(state) + "%2F" + str(county)
     return url
-    
+## Florida [32003, 34997]
 #url =  construct_regrid_url(46202, [2000, 2100])
-url = construct_regrid_url(55019, [1000, 9500])
-print("url---", url)
-response = requests.get(url, headers=HEADERS)
-print("response---", response.headers)
 
-if response.status_code == 200 and 'application/json' in response.headers['Content-Type']:
-    data = response.json()
-    print("------",data)
-    with open("3rd_API_output.json", "w") as file:
-        json.dump(data, file, indent=2)
-else:
-    print(f"Failed to fetch or parse JSON. Status code: {response.status_code}")
+for zipcode in range(32006, 34998):
+    url = construct_regrid_url(zipcode, [1000, 9520])
+    if url is not None:
+        print("url---", url)
+        response = requests.get(url, headers=HEADERS)
+        # print("response---", response.headers)
 
-target_key = "parcelnumb_no_formatting"
+        if response.status_code == 200 and 'application/json' in response.headers['Content-Type']:
+            data = response.json()
+            print("------",data['results'])
+            with open("temp.json", mode='r') as file:
+                json_data = json.load(file)
+                json_data["results"] += data["results"]
+                file.seek(0)
+                with open('temp.json', mode='w') as file:
+                    json.dump(json_data, file, indent=4)
+
+            # with open("temp.json", "w") as file:
+            #     json.dump(data, file, indent=2)
+        else:
+            print(f"Failed to fetch or parse JSON. Status code: {response.status_code}")
+    else:
+        continue
+
+
+
+
+
+#target_key = "parcelnumb_no_formatting"
 # print(count_key_occurence("output.json", target_key))
 
 
